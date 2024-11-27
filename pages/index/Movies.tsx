@@ -4,6 +4,7 @@ import { createMemo, createSignal, For, Suspense } from "solid-js";
 import { navigate } from "vike/client/router";
 import { Config } from "vike-solid/Config";
 import { Head } from "vike-solid/Head";
+import { isServer } from "solid-js/web";
 
 export function Movies() {
     const [isEnabled, setIsEnabled] = createSignal(false);
@@ -63,7 +64,7 @@ export function Movies() {
 async function getStarWarsMovies(): Promise<MovieDetails[]> {
     // Simulate slow network
     await new Promise((r) => setTimeout(r, 2000));
-
+    console.log("query is executed on " + (isServer ? "server" : "client"));
     const response = await fetch("https://star-wars.brillout.com/api/films.json");
     let movies: MovieDetails[] = ((await response.json()) as any).results;
     movies = movies.map((movie: MovieDetails, i: number) => ({
